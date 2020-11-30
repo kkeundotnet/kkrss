@@ -16,12 +16,12 @@ class KkItem
         string $link,
         string $description,
         string $guid,
-        string $pub_date
+        int $pub_time
     ) {
         $this->title = $title;
         $this->link = $link;
         $this->description = $description;
         $this->guid = $guid;
-        $this->pub_date = $pub_date;
+        $this->pub_date = date(DATE_RSS, $pub_time);
     }
 }

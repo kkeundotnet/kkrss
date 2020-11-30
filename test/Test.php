@@ -52,14 +52,14 @@ EXP;
     <link>https://link1</link>
     <description><![CDATA[description1]]></description>
     <guid isPermaLink="true">guid1</guid>
-    <pubDate>pub date1</pubDate>
+    <pubDate>Sun, 29 Nov 2020 15:44:53 +0000</pubDate>
   </item>
     <item>
     <title>title2</title>
     <link>https://link2</link>
     <description><![CDATA[description2]]></description>
     <guid isPermaLink="true">guid2</guid>
-    <pubDate>pub date2</pubDate>
+    <pubDate>Sun, 29 Nov 2020 15:44:53 +0000</pubDate>
   </item>
   </channel>
 </rss>
@@ -73,14 +73,14 @@ EXP;
             'https://link1',
             'description1',
             'guid1',
-            'pub date1'
+            strtotime('2020-11-30T00:44:53+09:00')
         );
         $viewer->items[] = new KkItem(
             'title2',
             'https://link2',
             'description2',
             'guid2',
-            'pub date2'
+            strtotime('2020-11-30T00:44:53+09:00')
         );
         $viewer->view_for_test();
     }
