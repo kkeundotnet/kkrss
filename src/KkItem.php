@@ -7,20 +7,20 @@ class KkItem
 {
     public string $title;
     public string $link;
-    public string $description;
+    public string $html_description;
     public string $guid;
     public string $pub_date;
 
     public function __construct(
         string $title,
         string $link,
-        string $description,
+        string $html_description,
         string $guid,
         int $pub_time
     ) {
         $this->title = $title;
         $this->link = $link;
-        $this->description = $description;
+        $this->html_description = $html_description;
         $this->guid = $guid;
         $this->pub_date = date(DATE_RSS, $pub_time);
     }

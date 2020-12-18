@@ -21,4 +21,9 @@ abstract class KkViewer
     {
         require('KkTemplate.php');
     }
+
+    private static function xml_escape(string $unsafe) : string
+    {
+        return htmlspecialchars($unsafe, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+    }
 }

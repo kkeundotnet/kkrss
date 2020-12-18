@@ -17,6 +17,18 @@ class KkViewerInstance extends KkViewer
     }
 }
 
+class KkViewerBadUserInstance extends KkViewer
+{
+    public function __construct()
+    {
+        $this->title = '&"\'<>';
+        $this->link = 'https://&"\'<>';
+        $this->description = '&"\'<>';
+        $this->is_perma_link_guid = true;
+        $this->items = [];
+    }
+}
+
 final class Test extends TestCase
 {
     public function testEmptyRss(): void
@@ -80,6 +92,39 @@ EXP;
             'https://link2',
             'description2',
             'guid2',
+            strtotime('2020-11-30T00:44:53+09:00')
+        );
+        $viewer->view_for_test();
+    }
+
+    public function testBadItemRss(): void
+    {
+        $expected = <<<'EXP'
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>&amp;&quot;&apos;&lt;&gt;</title>
+  <link>https://&amp;&quot;&apos;&lt;&gt;</link>
+  <description>&amp;&quot;&apos;&lt;&gt;</description>
+    <item>
+    <title>&amp;&quot;&apos;&lt;&gt;</title>
+    <link>https://&amp;&quot;&apos;&lt;&gt;</link>
+    <description><![CDATA[&amp;&quot;&apos;&lt;&gt;]]&gt;]]></description>
+    <guid isPermaLink="true">&amp;&quot;&apos;&lt;&gt;</guid>
+    <pubDate>Sun, 29 Nov 2020 15:44:53 +0000</pubDate>
+  </item>
+  </channel>
+</rss>
+
+EXP;
+        $this->expectOutputString($expected);
+
+        $viewer = new KkViewerBadUserInstance;
+        $viewer->items[] = new KkItem(
+            '&"\'<>',
+            'https://&"\'<>',
+            '&amp;&quot;&apos;&lt;&gt;]]&gt;',
+            '&"\'<>',
             strtotime('2020-11-30T00:44:53+09:00')
         );
         $viewer->view_for_test();
