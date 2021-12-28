@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Kkeundotnet\Kkrss\KkItem;
@@ -7,25 +8,29 @@ use PHPUnit\Framework\TestCase;
 
 class KkViewerInstance extends KkViewer
 {
-    public function __construct()
+    public function __construct(array $items)
     {
-        $this->title = 'My blog';
-        $this->link = 'https://my.blog.com/';
-        $this->description = 'Latest blog posts';
-        $this->is_perma_link_guid = true;
-        $this->items = [];
+        parent::__construct(
+            title:'My blog',
+            link:'https://my.blog.com/',
+            description: 'Latest blog posts',
+            is_perma_link_guid: true,
+            items: $items,
+        );
     }
 }
 
 class KkViewerBadUserInstance extends KkViewer
 {
-    public function __construct()
+    public function __construct(array $items)
     {
-        $this->title = '&"\'<>';
-        $this->link = 'https://&"\'<>';
-        $this->description = '&"\'<>';
-        $this->is_perma_link_guid = true;
-        $this->items = [];
+        parent::__construct(
+            title: '&"\'<>',
+            link: 'https://&"\'<>',
+            description: '&"\'<>',
+            is_perma_link_guid: true,
+            items: $items,
+        );
     }
 }
 
@@ -40,13 +45,13 @@ final class Test extends TestCase
   <title>My blog</title>
   <link>https://my.blog.com/</link>
   <description>Latest blog posts</description>
-  </channel>
+</channel>
 </rss>
 
 EXP;
         $this->expectOutputString($expected);
 
-        $viewer = new KkViewerInstance;
+        $viewer = new KkViewerInstance([]);
         $viewer->view_for_test();
     }
 
@@ -59,41 +64,42 @@ EXP;
   <title>My blog</title>
   <link>https://my.blog.com/</link>
   <description>Latest blog posts</description>
-    <item>
+  <item>
     <title>title1</title>
     <link>https://link1</link>
     <description><![CDATA[description1]]></description>
     <guid isPermaLink="true">guid1</guid>
     <pubDate>Sun, 29 Nov 2020 15:44:53 +0000</pubDate>
   </item>
-    <item>
+  <item>
     <title>title2</title>
     <link>https://link2</link>
     <description><![CDATA[description2]]></description>
     <guid isPermaLink="true">guid2</guid>
     <pubDate>Sun, 29 Nov 2020 15:44:53 +0000</pubDate>
   </item>
-  </channel>
+</channel>
 </rss>
 
 EXP;
         $this->expectOutputString($expected);
 
-        $viewer = new KkViewerInstance;
-        $viewer->items[] = new KkItem(
-            'title1',
-            'https://link1',
-            'description1',
-            'guid1',
-            strtotime('2020-11-30T00:44:53+09:00')
-        );
-        $viewer->items[] = new KkItem(
-            'title2',
-            'https://link2',
-            'description2',
-            'guid2',
-            strtotime('2020-11-30T00:44:53+09:00')
-        );
+        $viewer = new KkViewerInstance([
+            new KkItem(
+                title: 'title1',
+                link: 'https://link1',
+                html_description: 'description1',
+                guid: 'guid1',
+                pub_time: strtotime('2020-11-30T00:44:53+09:00'),
+            ),
+            new KkItem(
+                title: 'title2',
+                link: 'https://link2',
+                html_description: 'description2',
+                guid: 'guid2',
+                pub_time: strtotime('2020-11-30T00:44:53+09:00'),
+            ),
+        ]);
         $viewer->view_for_test();
     }
 
@@ -106,27 +112,28 @@ EXP;
   <title>&amp;&quot;&apos;&lt;&gt;</title>
   <link>https://&amp;&quot;&apos;&lt;&gt;</link>
   <description>&amp;&quot;&apos;&lt;&gt;</description>
-    <item>
+  <item>
     <title>&amp;&quot;&apos;&lt;&gt;</title>
     <link>https://&amp;&quot;&apos;&lt;&gt;</link>
     <description><![CDATA[&amp;&quot;&apos;&lt;&gt;]]&gt;]]></description>
     <guid isPermaLink="true">&amp;&quot;&apos;&lt;&gt;</guid>
     <pubDate>Sun, 29 Nov 2020 15:44:53 +0000</pubDate>
   </item>
-  </channel>
+</channel>
 </rss>
 
 EXP;
         $this->expectOutputString($expected);
 
-        $viewer = new KkViewerBadUserInstance;
-        $viewer->items[] = new KkItem(
-            '&"\'<>',
-            'https://&"\'<>',
-            '&amp;&quot;&apos;&lt;&gt;]]&gt;',
-            '&"\'<>',
-            strtotime('2020-11-30T00:44:53+09:00')
-        );
+        $viewer = new KkViewerBadUserInstance([
+            new KkItem(
+                title: '&"\'<>',
+                link: 'https://&"\'<>',
+                html_description: '&amp;&quot;&apos;&lt;&gt;]]&gt;',
+                guid: '&"\'<>',
+                pub_time: strtotime('2020-11-30T00:44:53+09:00'),
+            ),
+        ]);
         $viewer->view_for_test();
     }
 }

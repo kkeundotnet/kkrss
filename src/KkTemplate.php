@@ -9,7 +9,7 @@ namespace Kkeundotnet\Kkrss;
   <title><?= self::xml_escape($this->title) ?></title>
   <link><?= self::xml_escape($this->link) ?></link>
   <description><?= self::xml_escape($this->description) ?></description>
-  <?php foreach ($this->items as $item): ?>
+<?php foreach ($this->items as $item): ?>
   <item>
     <title><?= self::xml_escape($item->title) ?></title>
     <link><?= self::xml_escape($item->link) ?></link>
@@ -17,6 +17,6 @@ namespace Kkeundotnet\Kkrss;
     <guid isPermaLink="<?= $this->is_perma_link_guid ? 'true' : 'false' ?>"><?= self::xml_escape($item->guid) ?></guid>
     <pubDate><?= self::xml_escape($item->pub_date) ?></pubDate>
   </item>
-  <?php endforeach; ?>
+<?php endforeach; ?>
 </channel>
 </rss>
