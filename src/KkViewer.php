@@ -12,6 +12,7 @@ abstract class KkViewer
         protected readonly string $description,
         protected readonly bool $is_perma_link_guid,
         protected readonly array $items,
+        protected readonly ?string $feed_link = null,
     ) {
     }
 

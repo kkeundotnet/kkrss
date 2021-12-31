@@ -11,11 +11,26 @@ class KkViewerInstance extends KkViewer
     public function __construct(array $items)
     {
         parent::__construct(
-            title:'My blog',
-            link:'https://my.blog.com/',
+            title: 'My blog',
+            link: 'https://my.blog.com/',
             description: 'Latest blog posts',
             is_perma_link_guid: true,
             items: $items,
+        );
+    }
+}
+
+class KkViewerInstanceWithFeedLink extends KkViewer
+{
+    public function __construct(array $items)
+    {
+        parent::__construct(
+            title: 'My blog',
+            link: 'https://my.blog.com/',
+            description: 'Latest blog posts',
+            is_perma_link_guid: true,
+            items: $items,
+            feed_link: 'https://my.blog.com/feed.xml',
         );
     }
 }
@@ -40,7 +55,7 @@ final class Test extends TestCase
     {
         $expected = <<<'EXP'
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>My blog</title>
   <link>https://my.blog.com/</link>
@@ -59,7 +74,7 @@ EXP;
     {
         $expected = <<<'EXP'
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>My blog</title>
   <link>https://my.blog.com/</link>
@@ -107,7 +122,7 @@ EXP;
     {
         $expected = <<<'EXP'
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>&amp;&quot;&apos;&lt;&gt;</title>
   <link>https://&amp;&quot;&apos;&lt;&gt;</link>
@@ -134,6 +149,25 @@ EXP;
                 pub_time: strtotime('2020-11-30T00:44:53+09:00'),
             ),
         ]);
+        $viewer->view_for_test();
+    }
+
+    public function testFeeLink(): void
+    {
+        $expected = <<<'EXP'
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>My blog</title>
+  <link>https://my.blog.com/</link>
+  <atom:link href="https://my.blog.com/feed.xml" rel="self" type="application/rss+xml" />
+  <description>Latest blog posts</description>
+</channel>
+</rss>
+
+EXP;
+        $this->expectOutputString($expected);
+        $viewer = new KkViewerInstanceWithFeedLink([]);
         $viewer->view_for_test();
     }
 }
