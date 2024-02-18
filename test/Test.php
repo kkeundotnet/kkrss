@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class KkViewerInstance extends KkViewer
 {
+    /** @param KkItem[] $items */
     public function __construct(array $items)
     {
         parent::__construct(
@@ -22,6 +23,7 @@ class KkViewerInstance extends KkViewer
 
 class KkViewerInstanceWithFeedLink extends KkViewer
 {
+    /** @param KkItem[] $items */
     public function __construct(array $items)
     {
         parent::__construct(
@@ -37,6 +39,7 @@ class KkViewerInstanceWithFeedLink extends KkViewer
 
 class KkViewerBadUserInstance extends KkViewer
 {
+    /** @param KkItem[] $items */
     public function __construct(array $items)
     {
         parent::__construct(

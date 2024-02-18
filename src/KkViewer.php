@@ -6,6 +6,7 @@ namespace Kkeundotnet\Kkrss;
 
 abstract class KkViewer
 {
+    /** @param KkItem[] $items */
     public function __construct(
         protected readonly string $title,
         protected readonly string $link,
